@@ -1,0 +1,6 @@
+appsettings.secrets.json
+bin/
+obj/
+*.user
+*.vs
+.gitignore

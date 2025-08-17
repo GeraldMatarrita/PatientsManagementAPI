@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=User Id=${DB_USER};Password=${DB_PASSWORD};Data Source=${DB_DATA_SOURCE}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+    depends_on:
+      oracledb:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - data-protection-keys:/home/appuser/.aspnet/DataProtection-Keys
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  oracledb:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    environment:
+      - ORACLE_SID=XE
+      - ORACLE_PWD=${ORACLE_PWD}
+    ports:
+      - "1522:1521"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "sqlplus -s /nolog <<EOF\nconnect system/${ORACLE_PWD}@localhost:1521/XE\nSELECT 1 FROM DUAL;\nEOF"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  oracle-data:
+  data-protection-keys:
