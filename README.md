@@ -1,6 +1,6 @@
-﻿# GestionPacientesApi
+﻿# PatientsManagementAPI
 
-GestionPacientesApi is a RESTful API built with ASP.NET Core 8.0 for managing patients, doctors, and medical histories. It uses Oracle Database Express Edition(XE) as the database, JWT authentication for security, and Docker for containerized deployment. The API includes centralized error handling, pagination, filtering, and input sanitization.
+PatientsManagementAPI is a RESTful API built with ASP.NET Core 8.0 for managing patients, doctors, and medical histories. It uses Oracle Database Express Edition(XE) as the database, JWT authentication for security, and Docker for containerized deployment. The API includes centralized error handling, pagination, filtering, and input sanitization.
 
 ## Technologies Used
 - ASP.NET Core 8.0
